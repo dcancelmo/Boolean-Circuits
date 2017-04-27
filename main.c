@@ -53,7 +53,7 @@ static Circuit* Circuit_a() {
     gates[1] = and0;
     gates[2] = and1;
     gates[3] = or0;
-    return new_Circuit(3, inputs, 1, ouputs, 4, gates);
+    return new_Circuit(3, inputs, 1, outputs, 4, gates);
 }
 
 static Circuit* Circuit_b() {
@@ -86,13 +86,12 @@ static Circuit* Circuit_b() {
     gates[5] = or0;
     gates[6] = not3;
     
-    return new_Circuit(3, inputs, 1, ouputs, 7, gates);
+    return new_Circuit(3, inputs, 1, outputs, 7, gates);
 }
 
 static Circuit* Circuit_c() {
     Value* inx = new_Value(false);
     Value* iny = new_Value(false);
-    Value* inz = new_Value(false);
     
     Value** inputs = new_Value_array(2);
     inputs[0] = inx;
@@ -114,7 +113,7 @@ static Circuit* Circuit_c() {
     gates[3] = and1;
     gates[4] = or0;
     
-    return new_Circuit(2, inputs, 1, ouputs, 5, gates);
+    return new_Circuit(2, inputs, 1, outputs, 5, gates);
 }
 
 static char* b2s(bool b) {
@@ -131,11 +130,71 @@ static void test3In1Out(Circuit* circuit, bool in0, bool in1, bool in2) {
 	printf("%s %s %s -> %s\n", b2s(in0), b2s(in1), b2s(in2), b2s(out0));
 }
 
+static void test2In1Out(Circuit* circuit, bool in0, bool in1) {
+    Circuit_setInput(circuit, 0, in0);
+    Circuit_setInput(circuit, 1, in1);
+    //Circuit_dump(circuit);
+    Circuit_update(circuit);
+    bool out0 = Circuit_getOutput(circuit, 0);
+    printf("%s %s -> %s\n", b2s(in0), b2s(in1), b2s(out0));
+}
+
 
 int main(int argc, char **argv) {
-	Circuit* c = Circuits_and3();
-	printf("Some input(s) false: should be false\n");
-	test3In1Out(c, true, true, false);
-	printf("All inputs true: should be true\n");
-	test3In1Out(c, true, true, true);
+//	Circuit* c = Circuits_and3();
+//	printf("Some input(s) false: should be false\n");
+//	test3In1Out(c, true, true, false);
+//	printf("All inputs true: should be true\n");
+//	test3In1Out(c, true, true, true);
+    //Testing Circuit A
+    Circuit* c = Circuit_a();
+    printf("Testing circuit a with the following inputs: \n");
+    printf("True, true, true\n");
+    test3In1Out(c, true, true, true);
+    printf("False, true, true\n");
+    test3In1Out(c, false, true, true);
+    printf("True, false, true\n");
+    test3In1Out(c, true, false, true);
+    printf("True, true, false\n");
+    test3In1Out(c, true, true, false);
+    printf("False, false, true\n");
+    test3In1Out(c, false, false, true);
+    printf("True, false, false\n");
+    test3In1Out(c, true, false, false);
+    printf("False, true, false\n");
+    test3In1Out(c, false, true, false);
+    printf("false, false, false\n");
+    test3In1Out(c, false, false, false);
+    
+    //Testing Circuit B
+    c = Circuit_b();
+    printf("Testing circuit b with the following inputs: \n");
+    printf("True, true, true\n");
+    test3In1Out(c, true, true, true);
+    printf("false, true, true\n");
+    test3In1Out(c, false, true, true);
+    printf("True, false, true\n");
+    test3In1Out(c, true, false, true);
+    printf("True, true, false\n");
+    test3In1Out(c, true, true, false);
+    printf("False, false, true\n");
+    test3In1Out(c, false, false, true);
+    printf("True, false, false\n");
+    test3In1Out(c, true, false, false);
+    printf("False, true, false\n");
+    test3In1Out(c, false, true, false);
+    printf("false, false, false\n");
+    test3In1Out(c, false, false, false);
+    
+    c = Circuit_c();
+    printf("Testing circuit c with the following inputs: \n");
+    printf("True, true\n");
+    test2In1Out(c, true, true);
+    printf("false, true\n");
+    test2In1Out(c, false, true);
+    printf("True, false\n");
+    test2In1Out(c, true, false);
+    printf("false, false\n");
+    test2In1Out(c, false, false);
+
 }
